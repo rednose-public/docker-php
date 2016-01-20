@@ -19,3 +19,7 @@ RUN echo "date.timezone=${PHP_TIMEZONE:-UTC}" > $PHP_INI_DIR/conf.d/date_timezon
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
+    && apt-get install -y nodejs build-essential
