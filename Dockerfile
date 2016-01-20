@@ -24,10 +24,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
     && apt-get install -y nodejs build-essential
 
-# Install PhantomJS
+# Install PhantomJS deps
 RUN apt-get install wget libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev -y
-RUN export PHANTOM_JS="phantomjs-1.9.8-linux-x86_64" \
-    && wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 \
-    && tar xvjf $PHANTOM_JS.tar.bz2 \
-    && mv $PHANTOM_JS /usr/local/share \
-    && ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
