@@ -24,11 +24,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
     && apt-get install -y nodejs build-essential
 
-RUN wget -c http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip
-RUN unzip chromedriver_linux64_2.1.zip
-RUN cp ./chromedriver /usr/bin/
-RUN chmod ugo+rx /usr/bin/chromedriver
-
 # Install Chrome
 RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | tee -a /etc/apt/sources.list
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -42,10 +37,5 @@ RUN apt-get -y install google-chrome-stable
 RUN apt-get -y install xvfb gtk2-engines-pixbuf
 RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
 RUN apt-get -y install default-jre
-
-# Install Selenium
-ADD http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar /srv/
-RUN echo "exec java  -jar /srv/selenium-server-standalone-2.47.1.jar \"$@\"" > /usr/bin/selenium-server
-RUN chmod +x /usr/bin/selenium-server
 
 EXPOSE 4444
