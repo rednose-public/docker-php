@@ -1,7 +1,7 @@
 FROM php:5.6
 
 RUN apt-get update -y
-RUN apt-get install git zlib1g-dev -y
+RUN apt-get install wget git unzip zlib1g-dev -y
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN chmod +x composer.phar
@@ -24,20 +24,23 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
     && apt-get install -y nodejs build-essential
 
-# Install PhantomJS deps
-#RUN apt-get install wget libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev -y
+RUN wget -c http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip
+RUN unzip chromedriver_linux64_2.1.zip
+RUN cp ./chromedriver /usr/bin/
+RUN chmod ugo+rx /usr/bin/chromedriver
 
 # Install Chrome
-RUN apt-get update
-RUN apt-get install -y -q wget unzip dpkg libnss3-1d
-RUN wget --no-check-certificate -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-ADD http://chromedriver.storage.googleapis.com/2.13/chromedriver_linux64.zip /srv/
-RUN unzip /srv/chromedriver_linux64.zip -d /srv
-RUN echo deb http://dl.google.com/linux/chrome/deb/ stable main >> /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update
-#RUN apt-get install -q -y openjdk-7-jre-headless google-chrome-stable xvfb
-RUN apt-get install -q -y google-chrome-stable xvfb
+RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | tee -a /etc/apt/sources.list
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN apt-get update -y
 
-ADD ./install /
+# Install Google Chrome:
+RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
+RUN apt-get -y install google-chrome-stable
+
+# Dependencies to make "headless" chrome/selenium work:
+RUN apt-get -y install xvfb gtk2-engines-pixbuf
+RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
+RUN apt-get -y install default-jre
 
 EXPOSE 4444
