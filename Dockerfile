@@ -43,4 +43,9 @@ RUN apt-get -y install xvfb gtk2-engines-pixbuf
 RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
 RUN apt-get -y install default-jre
 
+# Install Selenium
+ADD http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar /srv/
+RUN echo "exec java  -jar /srv/selenium-server-standalone-2.47.1.jar \"$@\"" > /usr/bin/selenium-server
+RUN chmod +x /usr/bin/selenium-server
+
 EXPOSE 4444
