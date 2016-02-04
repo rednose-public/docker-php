@@ -38,4 +38,8 @@ RUN apt-get -y install xvfb gtk2-engines-pixbuf
 RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
 RUN apt-get -y install default-jre
 
+# Install Capifony:
+RUN apt-get -y install ruby
+RUN gem install capifony
+
 EXPOSE 4444
