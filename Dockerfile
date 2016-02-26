@@ -1,7 +1,7 @@
 FROM php:5.6
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev -y
+RUN apt-get install wget git unzip zlib1g-dev apt-utils libcurl4-openssl-dev libicu-dev -y
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN chmod +x composer.phar
@@ -9,7 +9,7 @@ RUN mv composer.phar /usr/local/bin/composer
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
-RUN docker-php-ext-install zip mbstring pdo_mysql
+RUN docker-php-ext-install zip mbstring pdo_mysql curl intl
 
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
