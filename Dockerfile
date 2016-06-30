@@ -32,6 +32,10 @@ RUN apt-get -y install xvfb gtk2-engines-pixbuf
 RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
 RUN apt-get -y install default-jre
 
+# Install selenium and chromedriver
+RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
+RUN curl http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
+
 # Install NodeJS packages
 RUN npm -g install bower grunt-cli
 
