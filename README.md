@@ -11,4 +11,6 @@ docker pull rednose/php
 
 ```
 docker build -t rednose/php:5.6 .
+docker tag rednose/php:5.6 rednose/php:latest
+docker push rednose/php
 ```
