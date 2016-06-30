@@ -6,3 +6,9 @@ Gitlab CI PHP docker base image for Symfony applications.
 ```
 docker pull rednose/php
 ```
+
+### Building and publishing the image
+
+```
+docker build -t rednose/php:5.6 .
+```
