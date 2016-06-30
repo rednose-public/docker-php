@@ -42,5 +42,7 @@ RUN npm -g install bower grunt-cli
 # Install Capifony
 RUN apt-get -y install ruby
 RUN gem install capifony
+RUN gem uninstall net-ssh --force
+RUN gem install net-ssh --version 3.1.1
 
 EXPOSE 4444
