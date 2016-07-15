@@ -1,7 +1,7 @@
 FROM php:5.6
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev -y
+RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev graphviz -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
