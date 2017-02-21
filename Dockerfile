@@ -21,11 +21,19 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
     && apt-get install -y nodejs build-essential
 
 # Install Chrome
-RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | tee -a /etc/apt/sources.list
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN apt-get update -y
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
-RUN apt-get -y install google-chrome-stable
+
+#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - 
+#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+RUN apt-get -y install  libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
+
+#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN wget http://www.slimjetbrowser.com/chrome/lnx/chrome64_54.0.2840.71.deb
+RUN dpkg -i chrome64_54.0.2840.71.deb
+RUN rm -f chrome64_54.0.2840.71.deb
+
+#RUN apt-get update -y
+#RUN apt-get -y install google-chrome-stable
 
 # Dependencies to make "headless" chrome/selenium work:
 RUN apt-get -y install xvfb gtk2-engines-pixbuf
@@ -34,7 +42,7 @@ RUN apt-get -y install default-jre
 
 # Install selenium and chromedriver
 RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
-RUN curl http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
+RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
 
 # Install NodeJS packages
 RUN npm -g install bower grunt-cli
