@@ -1,11 +1,14 @@
 FROM php:5.6
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev graphviz -y
+RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
 RUN docker-php-ext-install xsl zip mbstring pdo_mysql curl intl
+
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
+    && docker-php-ext-install ldap
 
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
@@ -22,18 +25,11 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
 
 # Install Chrome
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
+RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
 
-#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - 
-#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-RUN apt-get -y install  libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
-
-#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN wget http://www.slimjetbrowser.com/chrome/lnx/chrome64_54.0.2840.71.deb
 RUN dpkg -i chrome64_54.0.2840.71.deb
 RUN rm -f chrome64_54.0.2840.71.deb
-
-#RUN apt-get update -y
-#RUN apt-get -y install google-chrome-stable
 
 # Dependencies to make "headless" chrome/selenium work:
 RUN apt-get -y install xvfb gtk2-engines-pixbuf
