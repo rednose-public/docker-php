@@ -1,7 +1,7 @@
 FROM php:5.6
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz -y
+RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libfreetype6-dev libjpeg62-turbo-dev -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
@@ -9,6 +9,9 @@ RUN docker-php-ext-install xsl zip mbstring pdo_mysql curl intl
 
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
     && docker-php-ext-install ldap
+
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
 
 # Memory Limit
 RUN echo "memory_limit=-1" > $PHP_INI_DIR/conf.d/memory-limit.ini
