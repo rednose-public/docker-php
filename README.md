@@ -20,3 +20,9 @@ docker push rednose/php
 ```
 docker run -it rednose/php /bin/bash
 ```
+
+### Clearing the cache and building the image from scratch
+
+```
+docker build --no-cache .
+```
