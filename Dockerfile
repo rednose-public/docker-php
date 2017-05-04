@@ -1,7 +1,10 @@
 FROM php:5.6
 
+# Remove the cached packeges from the apt-cache before rebuilding the container
+RUN rm -Rf /var/cache/apt/archives/*
+
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng12-dev libfreetype6-dev -y
+RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng12-dev libfreetype6-dev libjpeg-dev libpng-dev -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
