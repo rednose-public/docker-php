@@ -3,8 +3,17 @@ FROM php:5.6
 # Remove the cached packeges from the apt-cache before rebuilding the container
 RUN rm -Rf /var/cache/apt/archives/*
 
+RUN echo "deb http://gce_debian_mirror.storage.googleapis.com jessie contrib non-free" >> /etc/apt/sources.list \
+    && echo "deb http://gce_debian_mirror.storage.googleapis.com jessie-updates contrib non-free" >> /etc/apt/sources.list \
+    && echo "deb http://security.debian.org/ jessie/updates contrib non-free" >> /etc/apt/sources.list
+
 RUN apt-get update -y
 RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng12-dev libfreetype6-dev libjpeg-dev libpng-dev -y
+
+RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
+    select true | debconf-set-selections
+
+RUN apt-get install ttf-mscorefonts-installer -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
