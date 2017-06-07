@@ -17,7 +17,7 @@ RUN apt-get install ttf-mscorefonts-installer -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
-RUN docker-php-ext-install xsl zip mbstring pdo_mysql curl intl
+RUN docker-php-ext-install xsl zip mbstring pdo_mysql curl intl soap
 
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
     && docker-php-ext-install ldap
