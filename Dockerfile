@@ -55,6 +55,16 @@ RUN apt-get -y install default-jre
 RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
 RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
 
+# Install redis caching service
+RUN mkdir /tmp/redis
+RUN wget http://download.redis.io/redis-stable.tar.gz -O /tmp/redis/redis.tar.gz
+RUN cd /tmp/redis && tar -zxvf redis.tar.gz
+RUN cd /tmp/redis/redis-stable
+RUN cd /tmp/redis/redis-stable && make
+RUN cd /tmp/redis/redis-stable && make install
+RUN mkdir /etc/redis
+COPY config/redis.conf /etc/redis/redis.conf
+
 # Install NodeJS packages
 RUN npm -g install bower grunt-cli
 
