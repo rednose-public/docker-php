@@ -52,8 +52,8 @@ RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xf
 RUN apt-get -y install default-jre
 
 # Install selenium and chromedriver
-#RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
-#RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
+RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > /bin/selenium.jar
+RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
 
 # Install redis caching service
 RUN mkdir /tmp/redis
