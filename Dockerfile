@@ -1,4 +1,4 @@
-FROM php:5.6
+FROM php:7.0-apache
 
 # Remove the cached packeges from the apt-cache before rebuilding the container
 RUN rm -Rf /var/cache/apt/archives/*
@@ -52,8 +52,8 @@ RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xf
 RUN apt-get -y install default-jre
 
 # Install selenium and chromedriver
-RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
-RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
+#RUN curl http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar > bin/selenium.jar
+#RUN curl http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d bin
 
 # Install redis caching service
 RUN mkdir /tmp/redis
@@ -70,8 +70,8 @@ RUN npm -g install bower grunt-cli
 
 # Install Capifony
 RUN apt-get -y install ruby
-RUN gem install capifony
 RUN gem uninstall net-ssh --force
 RUN gem install net-ssh --version 3.1.1
+RUN gem install capistrano
 
 EXPOSE 4444
