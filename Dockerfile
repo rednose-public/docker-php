@@ -72,6 +72,6 @@ RUN npm -g install bower grunt-cli
 RUN apt-get -y install ruby
 RUN gem uninstall net-ssh --force
 RUN gem install net-ssh --version 3.1.1
-RUN gem install capistrano
+RUN gem install capifony
 
 EXPOSE 4444
