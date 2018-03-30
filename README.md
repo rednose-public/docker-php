@@ -12,7 +12,8 @@ docker pull rednose/php
 ```
 docker build -t rednose/php:7.0 .
 docker tag rednose/php:7.0 rednose/php:latest
-docker push rednose/php
+docker push rednose/php:latest
+docker push rednose/php:7.0
 ```
 
 ### Starting bash
