@@ -8,13 +8,18 @@ RUN echo "deb http://gce_debian_mirror.storage.googleapis.com jessie contrib non
     && echo "deb http://security.debian.org/ jessie/updates contrib non-free" >> /etc/apt/sources.list
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng-dev libfreetype6-dev libjpeg-dev libpng-dev -y
+RUN apt-get install gnupg wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng-dev libfreetype6-dev libjpeg-dev libpng-dev -y
 
 RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
     select true | debconf-set-selections
 
 RUN apt-get install ttf-mscorefonts-installer -y
 
+# Install MYSQL57
+RUN echo "deb http://repo.mysql.com/apt/debian/ stretch mysql-5.7" >> /etc/apt/sources.list
+RUN wget -O /tmp/RPM-GPG-KEY-mysql https://repo.mysql.com/RPM-GPG-KEY-mysql
+RUN apt-key add /tmp/RPM-GPG-KEY-mysql
+RUN apt-get update -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server
 
 RUN docker-php-ext-install xsl zip mbstring pdo_mysql curl intl soap
@@ -35,9 +40,8 @@ RUN echo "date.timezone=${PHP_TIMEZONE:-UTC}" > $PHP_INI_DIR/conf.d/date_timezon
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js
-RUN apt-get -y install gnupg
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-    && apt-get install -y gnupg nodejs build-essential
+    && apt-get install -y nodejs build-essential
 
 # Install Chrome
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
@@ -78,12 +82,7 @@ RUN gem uninstall net-ssh --force
 RUN gem install net-ssh --version 3.1.1
 RUN gem install capifony
 
-# Install and configure OPCACHE
-RUN docker-php-ext-install opcache
-RUN echo "opcache.max_accelerated_files=10000" > $PHP_INI_DIR/conf.d/opcache.ini
-RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/opcache.ini
-RUN echo "opcache.enable_cli=1" >> $PHP_INI_DIR/conf.d/opcache.ini
-RUN echo "opcache.interned_strings_buffer=16" >> $PHP_INI_DIR/conf.d/opcache.ini
-RUN echo "opcache.memory_consumption=512" >> $PHP_INI_DIR/conf.d/opcache.ini
+# Allow mysql root user to connect over the loopback adapter
+RUN service mysql start && mysql -e "use mysql; update user set plugin = 'mysql_native_password';" && service mysql stop
 
 EXPOSE 4444
