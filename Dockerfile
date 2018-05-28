@@ -8,7 +8,7 @@ RUN echo "deb http://gce_debian_mirror.storage.googleapis.com jessie contrib non
     && echo "deb http://security.debian.org/ jessie/updates contrib non-free" >> /etc/apt/sources.list
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng12-dev libfreetype6-dev libjpeg-dev libpng-dev -y
+RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng-dev libfreetype6-dev libjpeg-dev libpng-dev -y
 
 RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
     select true | debconf-set-selections
@@ -35,8 +35,9 @@ RUN echo "date.timezone=${PHP_TIMEZONE:-UTC}" > $PHP_INI_DIR/conf.d/date_timezon
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
-    && apt-get install -y nodejs build-essential
+RUN apt-get -y install gnupg
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install -y gnupg nodejs build-essential
 
 # Install Chrome
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4
@@ -45,6 +46,9 @@ RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 lib
 RUN wget http://www.slimjetbrowser.com/chrome/lnx/chrome64_54.0.2840.71.deb
 RUN dpkg -i chrome64_54.0.2840.71.deb
 RUN rm -f chrome64_54.0.2840.71.deb
+
+# DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
+RUN mkdir -p /usr/share/man/man1
 
 # Dependencies to make "headless" chrome/selenium work:
 RUN apt-get -y install xvfb gtk2-engines-pixbuf
@@ -73,5 +77,13 @@ RUN apt-get -y install ruby
 RUN gem uninstall net-ssh --force
 RUN gem install net-ssh --version 3.1.1
 RUN gem install capifony
+
+# Install and configure OPCACHE
+RUN docker-php-ext-install opcache
+RUN echo "opcache.max_accelerated_files=10000" > $PHP_INI_DIR/conf.d/opcache.ini
+RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/opcache.ini
+RUN echo "opcache.enable_cli=1" >> $PHP_INI_DIR/conf.d/opcache.ini
+RUN echo "opcache.interned_strings_buffer=16" >> $PHP_INI_DIR/conf.d/opcache.ini
+RUN echo "opcache.memory_consumption=512" >> $PHP_INI_DIR/conf.d/opcache.ini
 
 EXPOSE 4444
