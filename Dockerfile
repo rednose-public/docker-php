@@ -1,14 +1,13 @@
-FROM php:7.0-apache
+FROM php:7.1-apache
 
 # Remove the cached packeges from the apt-cache before rebuilding the container
 RUN rm -Rf /var/cache/apt/archives/*
 
-RUN echo "deb http://gce_debian_mirror.storage.googleapis.com jessie contrib non-free" >> /etc/apt/sources.list \
-    && echo "deb http://gce_debian_mirror.storage.googleapis.com jessie-updates contrib non-free" >> /etc/apt/sources.list \
-    && echo "deb http://security.debian.org/ jessie/updates contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://ftp.de.debian.org/debian stretch contrib non-free" >> /etc/apt/sources.list \
+    && echo "deb http://ftp.de.debian.org/debian stretch-updates contrib non-free" >> /etc/apt/sources.list
 
 RUN apt-get update -y
-RUN apt-get install wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng-dev libfreetype6-dev libjpeg-dev libpng-dev -y
+RUN apt-get install build-essential make wget git unzip zlib1g-dev libxslt1-dev libcurl4-openssl-dev libicu-dev libldap2-dev graphviz libjpeg62-turbo-dev libpng-dev libfreetype6-dev libjpeg-dev libpng-dev -y
 
 RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
     select true | debconf-set-selections
@@ -37,7 +36,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install Node.js
 RUN apt-get -y install gnupg
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-    && apt-get install -y gnupg nodejs build-essential
+    && apt-get install -y gnupg nodejs
 
 # Install Chrome
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0
@@ -68,6 +67,11 @@ RUN cd /tmp/redis/redis-stable && make
 RUN cd /tmp/redis/redis-stable && make install
 RUN mkdir /etc/redis
 COPY config/redis.conf /etc/redis/redis.conf
+
+# Install imagick
+RUN apt-get -y install libmagick++-dev
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick
 
 # Install NodeJS packages
 RUN npm -g install bower grunt-cli
