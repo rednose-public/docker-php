@@ -42,9 +42,10 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0
 RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
 
-RUN wget http://www.slimjetbrowser.com/chrome/lnx/chrome64_66.0.3359.181.deb
-RUN dpkg -i chrome64_66.0.3359.181.deb
-RUN rm -f chrome64_66.0.3359.181.deb
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update -y
+RUN apt-get -y install google-chrome-stable
 
 # DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
 RUN mkdir -p /usr/share/man/man1
