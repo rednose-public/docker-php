@@ -50,8 +50,12 @@ RUN apt-get -y install google-chrome-stable
 # DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
 RUN mkdir -p /usr/share/man/man1
 
-# Install selenium and chromedriver
+# Dependencies to make "headless" chrome/selenium work:
+RUN apt-get -y install xvfb gtk2-engines-pixbuf
+RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
 RUN apt-get -y install default-jre
+
+# Install selenium and chromedriver
 RUN curl https://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-3.14.0.jar > /bin/selenium.jar
 RUN curl https://chromedriver.storage.googleapis.com/2.43/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
 
