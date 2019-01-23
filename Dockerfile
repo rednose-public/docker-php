@@ -44,7 +44,7 @@ RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 lib
 
 # See https://www.slimjet.com/chrome/google-chrome-old-version.php
 RUN wget http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb
-RUN dpkg - google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
 
 # DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
