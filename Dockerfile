@@ -57,7 +57,7 @@ RUN apt-get -y install default-jre
 
 # Install selenium and chromedriver
 RUN curl https://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-3.14.0.jar > /bin/selenium.jar
-RUN curl https://chromedriver.storage.googleapis.com/2.43/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
+RUN curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
 
 # Install redis caching service
 RUN mkdir /tmp/redis
