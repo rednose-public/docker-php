@@ -42,20 +42,16 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
 RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0
 RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
 
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update -y
-RUN apt-get -y install google-chrome-stable
+# See https://www.slimjet.com/chrome/google-chrome-old-version.php
+RUN wget http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb
+RUN dpkg - google-chrome-stable_current_amd64.deb
+RUN rm -f google-chrome-stable_current_amd64.deb
 
 # DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
 RUN mkdir -p /usr/share/man/man1
 
-# Dependencies to make "headless" chrome/selenium work:
-RUN apt-get -y install xvfb gtk2-engines-pixbuf
-RUN apt-get -y install xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable
-RUN apt-get -y install default-jre
-
 # Install selenium and chromedriver
+RUN apt-get -y install default-jre
 RUN curl https://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-3.14.0.jar > /bin/selenium.jar
 RUN curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
 
