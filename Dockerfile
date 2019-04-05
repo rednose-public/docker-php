@@ -75,7 +75,7 @@ RUN cd /tmp/redis/redis-stable && make install
 RUN mkdir /etc/redis
 COPY config/redis.conf /etc/redis/redis.conf
 
-# Allow mysql root user to connect over the loopback adapter
+# Allow MySQL root user to connect over the loopback adapter
 RUN service mysql start \
     && sleep 5 \
     && mysql -e "UPDATE mysql.user SET plugin = 'mysql_native_password';" \
