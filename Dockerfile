@@ -75,6 +75,12 @@ RUN cd /tmp/redis/redis-stable && make install
 RUN mkdir /etc/redis
 COPY config/redis.conf /etc/redis/redis.conf
 
+# Allow mysql root user to connect over the loopback adapter
+RUN service mysql start \
+    && sleep 5 \
+    && mysql -e "UPDATE mysql.user SET plugin = 'mysql_native_password';" \
+    && service mysql stop
+
 # Install Chrome
 RUN curl -sS -L https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
