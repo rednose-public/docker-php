@@ -73,12 +73,6 @@ RUN docker-php-ext-enable imagick
 # Install NodeJS packages
 RUN npm -g install bower grunt-cli
 
-# Install Capifony
-RUN apt-get -y install ruby
-RUN gem uninstall net-ssh --force
-RUN gem install net-ssh --version 3.1.1
-RUN gem install capifony
-
 # Install and configure OPCACHE
 RUN docker-php-ext-install opcache
 RUN echo "opcache.max_accelerated_files=10000" > $PHP_INI_DIR/conf.d/opcache.ini
