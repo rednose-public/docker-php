@@ -47,9 +47,6 @@ RUN wget http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-s
 RUN dpkg -i google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
 
-# DEBIAN-SLIM bugfix (Delete this line in the future, I expect the parent docker container to be fixed by then).
-RUN mkdir -p /usr/share/man/man1
-
 # Install selenium and chromedriver
 RUN apt-get -y install default-jre
 RUN curl https://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-3.14.0.jar > /bin/selenium.jar
