@@ -10,6 +10,7 @@ RUN apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
     build-essential \
     git \
+    gnupg \
     graphviz \
     libmagick++-dev \
     libcurl4-openssl-dev \
@@ -87,26 +88,10 @@ RUN wget -q https://chromedriver.storage.googleapis.com/2.46/chromedriver_linux6
     && unzip chromedriver_linux64.zip -d /usr/local/bin \
     && rm -f chromedriver_linux64.zip
 
-#RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0
-#RUN apt-get -y install libasound2 libpango1.0-0 libx11-xcb1 libxss1 libxtst6 libappindicator1 xdg-utils
-
-## See https://www.slimjet.com/chrome/google-chrome-old-version.php
-#RUN wget http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb
-#RUN dpkg -i google-chrome-stable_current_amd64.deb
-#RUN rm -f google-chrome-stable_current_amd64.deb
-
-## Install selenium and chromedriver
-#RUN apt-get -y install default-jre
-#RUN curl https://selenium-release.storage.googleapis.com/3.14/selenium-server-standalone-3.14.0.jar > /bin/selenium.jar
-#RUN curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > chromedriver.zip && unzip chromedriver.zip -d /bin
-
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - \
+RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - \
     && apt-get -y install \
     nodejs
-
-# Install Node.js packages
-RUN npm -g install bower
