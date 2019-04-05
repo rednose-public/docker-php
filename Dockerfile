@@ -80,5 +80,3 @@ RUN echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/opcache.ini
 RUN echo "opcache.enable_cli=1" >> $PHP_INI_DIR/conf.d/opcache.ini
 RUN echo "opcache.interned_strings_buffer=16" >> $PHP_INI_DIR/conf.d/opcache.ini
 RUN echo "opcache.memory_consumption=512" >> $PHP_INI_DIR/conf.d/opcache.ini
-
-EXPOSE 4444
