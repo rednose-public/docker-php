@@ -1,8 +1,5 @@
 FROM php:7.1-apache
 
-# Remove the cached packeges from the apt-cache before rebuilding the container
-RUN rm -Rf /var/cache/apt/archives/*
-
 RUN echo "deb http://ftp.de.debian.org/debian stretch contrib non-free" >> /etc/apt/sources.list \
     && echo "deb http://ftp.de.debian.org/debian stretch-updates contrib non-free" >> /etc/apt/sources.list
 
