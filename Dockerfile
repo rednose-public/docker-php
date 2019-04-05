@@ -81,7 +81,4 @@ RUN echo "opcache.enable_cli=1" >> $PHP_INI_DIR/conf.d/opcache.ini
 RUN echo "opcache.interned_strings_buffer=16" >> $PHP_INI_DIR/conf.d/opcache.ini
 RUN echo "opcache.memory_consumption=512" >> $PHP_INI_DIR/conf.d/opcache.ini
 
-# Allow mysql root user to connect over the loopback adapter
-RUN service mysql start && sleep 5 && mysql -e "use mysql; update user set plugin = 'mysql_native_password';" && service mysql stop
- 
 EXPOSE 4444
