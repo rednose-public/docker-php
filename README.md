@@ -1,5 +1,5 @@
-# Docker Gitlab CI PHP image
-Gitlab CI PHP docker base image for Symfony applications.
+# Docker GitLab CI PHP image
+GitLab CI PHP Docker base image for Symfony applications.
 
 ### Usage
 
@@ -10,10 +10,9 @@ docker pull rednose/php
 ### Building and publishing the image
 
 ```
-docker build -t rednose/php:7.2 .
-docker tag rednose/php:7.2 rednose/php:latest
-docker push rednose/php:latest
+docker build -t rednose/php:7.2 -t rednose/php:latest .
 docker push rednose/php:7.2
+docker push rednose/php:latest
 ```
 
 ### Starting bash

@@ -81,6 +81,14 @@ RUN service mysql start \
     && mysql -e "UPDATE mysql.user SET plugin = 'mysql_native_password';" \
     && service mysql stop
 
+# Update the Apache config
+RUN cd /etc/apache2/sites-enabled \
+  && sed -i -e 's/\/html/\/html\/web/g' 000-default.conf \
+  && sed -i -e 's/<\/VirtualHost>/        <Directory "\/var\/www\/html\/web">\n                AllowOverride All\n        <\/Directory>\n\nLimitRequestFieldSize 65000\n\n<\/VirtualHost>/g' 000-default.conf
+
+# Enable mod_rewrite
+RUN a2enmod rewrite
+
 # Install Chrome
 RUN curl -sS -L https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
