@@ -84,8 +84,8 @@ RUN service mysql start \
 
 # Update the Apache config
 RUN cd /etc/apache2/sites-enabled \
-  && sed -i -e 's/\/html/\/html\/web/g' 000-default.conf \
-  && sed -i -e 's/<\/VirtualHost>/        <Directory "\/var\/www\/html\/web">\n                AllowOverride All\n        <\/Directory>\n\nLimitRequestFieldSize 65000\n\n<\/VirtualHost>/g' 000-default.conf
+  && sed -i -e 's/\/html/\/html\/public/g' 000-default.conf \
+  && sed -i -e 's/<\/VirtualHost>/        <Directory "\/var\/www\/html\/public">\n                AllowOverride All\n        <\/Directory>\n\nLimitRequestFieldSize 65000\n\n<\/VirtualHost>/g' 000-default.conf
 
 # Enable mod_rewrite
 RUN a2enmod rewrite
