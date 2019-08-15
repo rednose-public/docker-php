@@ -13,20 +13,26 @@ RUN apt-get update -q \
     git \
     gnupg \
     graphviz \
-    libmagick++-dev \
+    libasound2 \
     libcurl4-openssl-dev \
     libfreetype6-dev \
+    libgconf-2-4 \
+    libgtk2.0-0 \
     libicu-dev \
     libjpeg-dev \
     libjpeg62-turbo-dev \
     libldap2-dev \
+    libmagick++-dev \
+    libnotify-dev \
+    libnss3 \
     libpng-dev \
     libxslt1-dev \
+    libxss1 \
     make \
-    mysql-server \
     ttf-mscorefonts-installer \
     unzip \
     wget \
+    xvfb \
     zlib1g-dev
 
 RUN docker-php-ext-configure \
@@ -66,30 +72,6 @@ RUN echo "memory_limit=5G" > $PHP_INI_DIR/conf.d/memory-limit.ini
 # Time Zone
 RUN echo "date.timezone=${PHP_TIMEZONE:-UTC}" > $PHP_INI_DIR/conf.d/date_timezone.ini
 
-# Install Redis caching service
-RUN mkdir /tmp/redis
-RUN wget http://download.redis.io/redis-stable.tar.gz -O /tmp/redis/redis.tar.gz
-RUN cd /tmp/redis && tar -zxvf redis.tar.gz
-RUN cd /tmp/redis/redis-stable
-RUN cd /tmp/redis/redis-stable && make
-RUN cd /tmp/redis/redis-stable && make install
-RUN mkdir /etc/redis
-COPY config/redis.conf /etc/redis/redis.conf
-
-# Allow MySQL root user to connect over the loopback adapter
-RUN service mysql start \
-    && sleep 5 \
-    && mysql -e "UPDATE mysql.user SET plugin = 'mysql_native_password';" \
-    && service mysql stop
-
-# Update the Apache config
-RUN cd /etc/apache2/sites-enabled \
-  && sed -i -e 's/\/html/\/html\/public/g' 000-default.conf \
-  && sed -i -e 's/<\/VirtualHost>/        <Directory "\/var\/www\/html\/public">\n                AllowOverride All\n        <\/Directory>\n\nLimitRequestFieldSize 65000\n\n<\/VirtualHost>/g' 000-default.conf
-
-# Enable mod_rewrite
-RUN a2enmod rewrite
-
 # Install Chrome
 RUN curl -sS -L https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
@@ -99,9 +81,13 @@ RUN apt-get update -q -y \
     google-chrome-stable
 
 # Install ChromeDriver
-RUN wget -q https://chromedriver.storage.googleapis.com/2.46/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip -d /usr/local/bin \
-    && rm -f chromedriver_linux64.zip
+RUN BASE_URL=https://chromedriver.storage.googleapis.com \
+    && VERSION=$(curl -sL "$BASE_URL/LATEST_RELEASE") \
+    && curl -sL "$BASE_URL/$VERSION/chromedriver_linux64.zip" -o /tmp/driver.zip \
+    && unzip /tmp/driver.zip \
+    && chmod 755 chromedriver \
+    && mv chromedriver /usr/local/bin/ \
+    && rm -rf /tmp/driver.zip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
