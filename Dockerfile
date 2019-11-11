@@ -30,6 +30,7 @@ RUN apt-get update -q \
     libxss1 \
     make \
     rubygems \
+    ssh \
     ttf-mscorefonts-installer \
     unzip \
     wget \
